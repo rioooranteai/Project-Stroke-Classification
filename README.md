@@ -49,6 +49,10 @@ Melalui proyek ini, penulis mencoba membangun sebuah model prediktif sederhana n
 
 ---
 
+## 3. Data Understanding
+
+Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle ([https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset](https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset). Terdiri atas 2.527 gambar dengan 6 kelas.
+
 ## Referensi
 
 [1] World Health Organization. (2018). The top 10 causes of death.  
