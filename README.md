@@ -23,7 +23,7 @@ Melalui proyek ini, penulis mencoba membangun sebuah model prediktif sederhana n
 ### 2.1 Problem Statements
 
 * **Problem Statements 1**
-  Penyakit stroke merupakan salah satu penyebab kematian tertinggi di Indonesia, namun belum tersedia sistem deteksi dini yang andal dan efektif. Hal ini menyebabkan banyak kasus baru teridentifikasi ketika kondisi pasien sudah kronis dan sulit ditangani secara preventif.
+  Penyakit stroke merupakan salah satu penyebab kematian tertinggi di Indonesia, namun teknologi sistem deteksi dini yang andal dan efektif masih minim. Hal ini menyebabkan banyak kasus baru teridentifikasi ketika kondisi pasien sudah kronis dan sulit ditangani secara preventif.
 
 * **Problem Statements 2**
   Karakteristik data kesehatan yang tidak seimbang, di mana jumlah pasien non-stroke jauh lebih besar dibandingkan pasien stroke, membuat sebagian besar model machine learning cenderung bias terhadap kelas mayoritas. Hal ini mengakibatkan tingginya kesalahan dalam mendeteksi pasien yang sebenarnya memiliki risiko stroke.
@@ -55,7 +55,7 @@ Melalui proyek ini, penulis mencoba membangun sebuah model prediktif sederhana n
 
 ## 3. Data Understanding
 
-Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle ([https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset](https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset)). Terdiri atas 5.110 entri data dengan 2 kelas.
+Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle ([https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset](https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset)). Terdiri atas 5.110 entri data dengan 2 kelas. Data ini cukup mendekati karakteristik variabel yang menandai stroke berdasarkan riset yang telah disampaikan pada latar belakang.
 
 ### 3.1 Deskripsi Dataset
 | No. | Kolom               | Tipe Data | Jumlah Non-Null | Deskripsi                                                     |
@@ -138,7 +138,7 @@ df_prep = pd.get_dummies(df_prep, columns=['work_type'], drop_first=True, prefix
 
 ### 4.3 Menangani Missing Values
 
-Pada tahap imputasi missing value, digunakan metode **KNNImputer** dengan 5 tetangga terdekat untuk mengisi nilai kosong, khususnya pada kolom `bmi`. Metode ini dipilih karena mampu mempertimbangkan kemiripan antar data dalam mengisi nilai yang hilang, sehingga lebih akurat dibandingkan imputasi sederhana seperti mean atau median global. Dengan pendekatan ini, nilai yang hilang diisi berdasarkan rata-rata nilai dari data terdekat yang serupa, sehingga menjaga konsistensi pola dalam dataset.
+Pada tahap imputasi missing value, digunakan metode **KNNImputer** dengan 5 neighbors terdekat untuk mengisi nilai kosong, khususnya pada kolom `bmi`. Metode ini dipilih karena mampu mempertimbangkan kemiripan antar data dalam mengisi nilai yang hilang, sehingga lebih akurat dibandingkan imputasi sederhana seperti mean atau median global. Dengan pendekatan ini, nilai yang hilang diisi berdasarkan rata-rata nilai dari data terdekat yang serupa, sehingga menjaga konsistensi pola dalam dataset.
 
 ```python
 imputer = KNNImputer(n_neighbors=5)  
@@ -347,7 +347,10 @@ Kurva ROC untuk model Decision Tree pada klasifikasi stroke ini menunjukkan nila
 ## Referensi
 
 \[1] 	"The top 10 causes of death," World Health Organization (WHO), 7 Agustus 2024. [Online]. Available: https://www.who.int/news-room/fact-sheets/detail/the-top-10-causes-of-death. [Accessed 29 Mei 2025].
+
 \[2] 	H. Yaputra, "Kemenkes: Tren Kasus Stroke Alami Peningkatan dan Jadi Penyebab Kematian Tertinggi," Tempo, 29 Oktober 2024. [Online]. Available: https://www.tempo.co/politik/kemenkes-tren-kasus-stroke-alami-peningkatan-dan-jadi-penyebab-kematian-tertinggi-1161217. [Accessed 29 Mei 2025].
+
 \[3] 	M. B. B. N. S. M. R. L. S. W. H. M. F. J. P. P. L. Valery L Feigin, "World Stroke Organization (WSO): Global Stroke Fact Sheet 2022," International journal of stroke : official journal of the International Stroke Society, vol. 17, no. 1, pp. 18-19, 2022. 
+
 \[4] 	C. E. M. S. V. E. Amelia K Boehme, "Stroke Risk Factors, Genetics, and Prevention," Circulation research, vol. 120, no. 3, p. 472–495, 2017. 
 
