@@ -107,6 +107,12 @@ df_prep = df_prep.drop_duplicates()
 
 ### 4.2 Menangani Missing Values
 
+```python
+imputer = KNNImputer(n_neighbors=5)  
+bmi_imputed = imputer.fit_transform(df_prep)
+df_imputed = pd.DataFrame(bmi_imputed, columns=df_prep.columns)
+```
+
 ### 4.3 Encoding Variabel Kategorikal
 
 ### 4.4 Menangani Outlier
