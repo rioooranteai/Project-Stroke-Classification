@@ -177,6 +177,111 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 ## 5. Modeling
 
+### 5.1 Model Selection
+
+Terdapat beberapa model yang akan dicoba dalam project ini, yaitu:
+
+#### 1. **Random Forest**
+
+* **Kelebihan:**
+
+  * Relatif robust terhadap data imbalance karena menggunakan agregasi dari banyak pohon keputusan.
+  * Dapat menangani overfitting lebih baik dibanding Decision Tree tunggal.
+  * Bisa menggunakan class weighting (`class_weight='balanced'`) untuk menangani ketidakseimbangan kelas.
+
+* **Kekurangan:**
+
+  * Tanpa penyesuaian, masih bisa bias terhadap kelas mayoritas.
+  * Interpretasi hasil lebih sulit dibanding pohon tunggal.
+  * Cenderung memiliki F1-score rendah jika tidak disesuaikan untuk minoritas.
+
+#### 2. **Decision Tree**
+
+* **Kelebihan:**
+
+  * Sangat mudah diinterpretasikan dan divisualisasikan.
+  * Cepat dalam pelatihan dan prediksi.
+  * Bisa diatur untuk memperhatikan kelas minoritas dengan pengaturan `class_weight`.
+
+* **Kekurangan:**
+
+  * Rentan terhadap overfitting terutama pada data kecil atau tidak seimbang.
+  * Tanpa penyesuaian, cenderung mengabaikan kelas minoritas seperti stroke.
+  * Performanya sangat tergantung pada hyperparameter dan pruning.
+
+
+#### 3. **XGBoost**
+
+* **Kelebihan:**
+
+  * Model boosting yang kuat untuk menangani dataset tidak seimbang menggunakan parameter seperti `scale_pos_weight`.
+  * Lebih stabil dan akurat dibanding pohon tunggal dalam data yang kompleks.
+  * Memiliki fitur regularisasi yang mengurangi overfitting.
+
+* **Kekurangan:**
+
+  * Butuh tuning parameter yang teliti agar bisa menangani data imbalance dengan baik.
+  * Lebih lambat dibanding model yang lebih ringan seperti Decision Tree.
+  * Interpretasi model lebih sulit.
+
+#### 4. **LightGBM**
+
+* **Kelebihan:**
+
+  * Cepat dalam pelatihan dan cocok untuk dataset besar.
+  * Menyediakan parameter `is_unbalance=True` atau `scale_pos_weight` untuk menangani ketidakseimbangan kelas.
+  * Hemat memori dan mendukung categorical feature secara native.
+
+* **Kekurangan:**
+
+  * Bisa sangat bias terhadap kelas mayoritas jika tidak dituning untuk imbalance.
+  * Kurang optimal pada dataset kecil.
+  * Sensitif terhadap outlier atau data minoritas yang ekstrem.
+
+#### 5. **CatBoost**
+
+* **Kelebihan:**
+
+  * Menangani categorical feature secara otomatis dan efisien.
+  * Bisa menangani ketidakseimbangan kelas menggunakan parameter `scale_pos_weight`.
+  * Lebih stabil pada data kecil dan sedikit preprocessing.
+
+* **Kekurangan:**
+
+  * Cenderung underperform pada data sangat imbalance jika tidak diatur secara eksplisit.
+  * Training bisa lebih lama dibanding model lain seperti LightGBM.
+  * Dokumentasi untuk penanganan imbalance tidak selengkap XGBoost atau LightGBM.
+
+
+```python
+models = {
+    'RandomForest': RandomForestClassifier(random_state=42),
+    'DecisionTree': DecisionTreeClassifier(random_state=42),
+    'XGBoost': XGBClassifier(use_label_encoder=False, eval_metric='logloss', random_state=42),
+    'LightGBM': LGBMClassifier(random_state=42, verbose=-1),
+    'Catboost': CatBoostClassifier(verbose=0, random_state=42)
+}
+
+skf_non_umap = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+model_scores_non_umap = {}
+
+for name, model in models.items():
+    scores = cross_val_score(model, X, y, cv=skf_non_umap, scoring='f1_macro')
+    model_scores_non_umap[name] = np.mean(scores)
+    print(f"{name}: F1-weighted Score = {model_scores_non_umap[name]:.4f}")
+
+sorted_models_non_umap = sorted(model_scores_non_umap.items(), key=lambda x: x[1], reverse=True)
+```
+
+| Model        | F1-weighted Score |
+| ------------ | ----------------- |
+| RandomForest | 0.4873            |
+| DecisionTree | 0.5382            |
+| XGBoost      | 0.5226            |
+| LightGBM     | 0.5064            |
+| CatBoost     | 0.5044            |
+
+
 ## 6. Evaluasi
 
 ### 6.1 Classification Report
@@ -202,13 +307,19 @@ $$
 F1_{macro} = \frac{1}{N} \sum_{i=1}^{N} F1_i
 $$
 
-dengan $N$ adalah jumlah kelas dan $F1_i$ adalah skor F1 dari kelas ke-$i$. Pendekatan ini sangat relevan ketika ingin memastikan bahwa model tidak mengabaikan performa pada kelas yang minoritas, seperti kasus positif stroke. 
+dengan $N$ adalah jumlah kelas dan $F1_i$ adalah skor F1 dari kelas ke-i. Pendekatan ini sangat relevan ketika ingin memastikan bahwa model tidak mengabaikan performa pada kelas yang minoritas, seperti kasus positif stroke. 
+
+Berdasarkan hasil diatas, ditunjukkan bahwa akurasi model yang tinggi sebesar 94%, namun F1 Score Macro hanya 0,61, yang mencerminkan performa rata-rata model pada kedua kelas secara seimbang. Akurasi yang tinggi ini dipengaruhi oleh dominasi kelas Non-Stroke yang jumlahnya jauh lebih banyak, sehingga model cenderung baik dalam mengklasifikasikan kelas mayoritas tetapi kurang efektif mendeteksi kasus Stroke dengan F1 Score rendah (0,25).
 
 ### 6.2 Confusion Matrix
 ![Confusion Matrix](Images/Conf.png)
 
+Confusion matrix di atas menunjukkan hasil performa model klasifikasi terhadap dua kelas, yaitu Non-Stroke dan Stroke. Dari total data, model berhasil mengklasifikasikan 952 kasus Non-Stroke dengan benar, namun salah mengklasifikasikan 20 kasus Non-Stroke sebagai Stroke. Di sisi lain, hanya 10 kasus Stroke yang berhasil diklasifikasikan dengan benar, sementara 40 kasus Stroke salah diklasifikasikan sebagai Non-Stroke. Hal ini menunjukkan bahwa model memiliki akurasi tinggi dalam mengenali kasus Non-Stroke, tetapi sangat lemah dalam mendeteksi kasus Stroke, yang tercermin dari rendahnya recall untuk kelas Stroke. Kondisi ini berisiko tinggi dalam konteks medis karena dapat menyebabkan banyak kasus stroke yang tidak terdeteksi.
+
 ### 6.3 ROV Curve
 ![ROV Curve](Images/AUC.png)
+
+Kurva ROC untuk model Decision Tree pada klasifikasi stroke ini menunjukkan nilai AUC sebesar 0.69, yang berarti model memiliki kemampuan diskriminatif yang sedang dalam membedakan antara kasus Stroke dan Non-Stroke. Kurva ROC yang sedikit menjauhi garis diagonal (garis abu-abu) menunjukkan bahwa model lebih baik dari sekadar tebakan acak, namun belum cukup kuat untuk diandalkan dalam konteks medis yang kritis. Nilai AUC yang sama seperti pada model CatBoost sebelumnya mengindikasikan performa yang setara, sehingga diperlukan perbaikan baik dari sisi fitur, data balancing, maupun tuning hyperparameter agar model dapat lebih akurat dalam mendeteksi kasus stroke secara tepat.
 
 ## Referensi
 
