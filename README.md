@@ -107,6 +107,16 @@ Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle ([https:
 ### 4.4 Menangani Outlier
 
 ### 4.5 Feature Engineering
+| Fitur Baru                | Deskripsi                                              |
+| ------------------------- | ------------------------------------------------------ |
+| `age_group`               | Kategori usia (muda, dewasa, lansia)                   |
+| `glucose_bmi_interaction` | Interaksi kadar glukosa dan BMI                        |
+| `glucose_per_bmi`         | Rasio kadar glukosa terhadap BMI                       |
+| `age_x_smoking`           | Efek gabungan usia dan status merokok                  |
+| `chronic_risk`            | 1 jika pasien memiliki hipertensi dan penyakit jantung |
+| `is_employed`             | 1 jika pasien bekerja, 0 jika anak atau tidak bekerja  |
+| `gender_hyper`            | Efek gabungan jenis kelamin dan hipertensi             |
+
 
 ### 4.6 Split Data untuk Pelatihan
 
