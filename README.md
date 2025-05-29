@@ -95,6 +95,19 @@ Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle ([https:
 - Tingkat Glukosa Rata-rata (avg_glucose_level): Penderita stroke cenderung memiliki kadar glukosa darah yang lebih tinggi, sebagian besar di atas 150. Ini mendukung hipotesis bahwa kadar gula darah tinggi (misalnya akibat diabetes) merupakan faktor risiko stroke.
 - BMI (bmi): Tidak terlihat pola yang sangat jelas antara BMI dan stroke, namun sebagian besar penderita stroke berada dalam rentang BMI 25–40, yang termasuk kategori overweight hingga obesitas. Hal ini menunjukkan bahwa kelebihan berat badan bisa menjadi salah satu faktor pendukung, meskipun tidak sekuat usia dan kadar glukosa.
 
+---
+
+## 4. Data Preparation
+### 4.1 Drop Kolom yang Tidak Relevan (ID, Duplikat)
+
+### 4.2 Menangani Missing Values
+
+### 4.3 Encoding Variabel Kategorikal
+
+### 4.4 Menangani Outlier
+
+### 4.5 Feature Engineering
+
 ## Referensi
 
 [1] World Health Organization. (2018). The top 10 causes of death.  
