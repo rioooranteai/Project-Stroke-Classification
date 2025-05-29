@@ -273,6 +273,8 @@ for name, model in models.items():
 sorted_models_non_umap = sorted(model_scores_non_umap.items(), key=lambda x: x[1], reverse=True)
 ```
 
+Berikut adalah hasilnya:
+
 | Model        | F1-weighted Score |
 | ------------ | ----------------- |
 | RandomForest | 0.4873            |
@@ -281,6 +283,7 @@ sorted_models_non_umap = sorted(model_scores_non_umap.items(), key=lambda x: x[1
 | LightGBM     | 0.5064            |
 | CatBoost     | 0.5044            |
 
+Berdasarkan hasil diatas, maka model yang akan masuk ke tahapan improvement melalui hyperparameter adalah Decision Tree
 
 ## 6. Evaluasi
 
