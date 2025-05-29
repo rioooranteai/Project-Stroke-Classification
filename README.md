@@ -108,6 +108,8 @@ Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle ([https:
 
 ### 4.5 Feature Engineering
 
+### 4.6 Split Data untuk Pelatihan
+
 ## Referensi
 
 [1] World Health Organization. (2018). The top 10 causes of death.  
