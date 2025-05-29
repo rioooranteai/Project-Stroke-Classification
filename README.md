@@ -69,6 +69,11 @@ Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle ([https:
 | 11  | `smoking_status`    | object    | 5110            | Status merokok pasien (tidak pernah, pernah, merokok, dll.)   |
 | 12  | `stroke`            | int64     | 5110            | Target: 1 jika pasien pernah mengalami stroke, 0 jika belum   |
 
+### 3.2 Korelasi Antar Fitur
+![Korelasi Antar Fitur](Images/corr.png)
+- Berdasarkan heatmap korelasi, terlihat bahwa usia (age) memiliki korelasi positif tertinggi dengan stroke (0.25), diikuti oleh hipertensi (0.13) dan penyakit jantung (0.13), menunjukkan bahwa ketiga faktor ini berpotensi meningkatkan risiko stroke. Selain itu, ever_married (-0.11) dan work_type_children (0.54) memiliki korelasi signifikan dengan variabel lain, seperti usia, yang mengindikasikan bahwa status pernikahan dan pekerjaan mungkin memengaruhi profil risiko. Namun, Residence_type hampir tidak berkorelasi dengan variabel lain (nilai mendekati 0), sehingga kurang relevan sebagai prediktor. Korelasi negatif antara BMI (-0.45) dan work_type_children mencerminkan bahwa anak-anak cenderung memiliki BMI lebih rendah. Data juga menunjukkan multikolinearitas antara beberapa variabel, seperti usia dan work_type_children (0.63), yang perlu dipertimbangkan dalam pemodelan untuk menghindari bias. Secara keseluruhan, usia, kondisi medis (hipertensi, penyakit jantung), dan faktor gaya hidup (status merokok, BMI) adalah prediktor kunci yang memerlukan analisis lebih mendalam.
+
+
 ## Referensi
 
 [1] World Health Organization. (2018). The top 10 causes of death.  
