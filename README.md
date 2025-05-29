@@ -110,15 +110,33 @@ df_prep = df_prep.drop_duplicates()
 * **Menghapus duplikasi data:**
   Data duplikat dapat menyebabkan model bias terhadap nilai yang berulang dan mengganggu distribusi data. Oleh karena itu, dilakukan penghapusan data duplikat untuk meningkatkan kualitas dataset.
 
-### 4.2 Menangani Missing Values
+### 4.2 Encoding Variabel Kategorikal
+
+Pada tahap praproses data, dilakukan konversi nilai kategorikal menjadi numerik agar dapat digunakan oleh algoritma machine learning. Beberapa kolom seperti `gender`, `ever_married`, `Residence_type`, dan `smoking_status` dikonversi secara manual menggunakan pemetaan nilai (label encoding) sesuai dengan makna ordinal atau kategorinya. Sementara untuk kolom `work_type`, digunakan teknik one-hot encoding agar model dapat menangani data kategorikal nominal tanpa mengasumsikan urutan, dan argumen `drop_first=True` diterapkan untuk menghindari multikolinearitas. Pendekatan ini memastikan data input berada dalam format numerik yang dapat diterima model sekaligus mempertahankan informasi kategori secara optimal.
+
+```python
+df_prep['gender'] = df_prep['gender'].apply(lambda x: 0 if x == 'Male' else 1 if x == "Female" else 2)
+df_prep['ever_married'] = df_prep['ever_married'].apply(lambda x: 0 if x == 'Yes' else 1)
+df_prep['Residence_type'] = df_prep['Residence_type'].apply(lambda x: 0 if x == 'Urban' else 1)
+
+smoke_mapping = {
+    'never smoked': 0,
+    'formerly smoked': 1,
+    'smokes': 2,
+    'Unknown': 3
+}
+df_prep['smoking_status'] = df_prep['smoking_status'].map(smoke_mapping)
+df_prep = pd.get_dummies(df_prep, columns=['work_type'], drop_first=True, prefix='work_type', dtype=int)
+```
+
+### 4.3 Menangani Missing Values
 
 ```python
 imputer = KNNImputer(n_neighbors=5)  
 bmi_imputed = imputer.fit_transform(df_prep)
 df_imputed = pd.DataFrame(bmi_imputed, columns=df_prep.columns)
 ```
-
-### 4.3 Encoding Variabel Kategorikal
+Pada tahap imputasi missing value, digunakan metode **KNNImputer** dengan 5 tetangga terdekat untuk mengisi nilai kosong, khususnya pada kolom `bmi`. Metode ini dipilih karena mampu mempertimbangkan kemiripan antar data dalam mengisi nilai yang hilang, sehingga lebih akurat dibandingkan imputasi sederhana seperti mean atau median global. Dengan pendekatan ini, nilai yang hilang diisi berdasarkan rata-rata nilai dari data terdekat yang serupa, sehingga menjaga konsistensi pola dalam dataset.
 
 ### 4.4 Menangani Outlier
 
