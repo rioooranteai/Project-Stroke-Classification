@@ -104,6 +104,11 @@ Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle ([https:
 df_prep = df_prep.drop(columns=['id'])  
 df_prep = df_prep.drop_duplicates()
 ```
+* **Menghapus kolom tidak relevan:**
+  Kolom `id` merupakan identifier unik yang tidak memberikan informasi prediktif terhadap risiko stroke, sehingga dihapus dari dataset.
+
+* **Menghapus duplikasi data:**
+  Data duplikat dapat menyebabkan model bias terhadap nilai yang berulang dan mengganggu distribusi data. Oleh karena itu, dilakukan penghapusan data duplikat untuk meningkatkan kualitas dataset.
 
 ### 4.2 Menangani Missing Values
 
