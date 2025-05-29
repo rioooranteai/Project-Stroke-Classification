@@ -140,6 +140,13 @@ Pada tahap imputasi missing value, digunakan metode **KNNImputer** dengan 5 teta
 
 ### 4.4 Menangani Outlier
 
+```python
+con_columns = ['avg_glucose_level', 'bmi']
+df_imputed[con_columns] = df_imputed[con_columns].apply(lambda x: winsorize(x, (0.05, 0.05)))
+```
+
+Dalam tahap pembersihan data, dilakukan proses winsorizing pada dua fitur kontinu, yaitu `avg_glucose_level` dan `bmi`, untuk mengurangi pengaruh outlier ekstrem yang dapat mengganggu performa model machine learning. Metode winsorize menggantikan nilai-nilai ekstrem di bawah persentil 5 dan di atas persentil 95 dengan nilai-nilai batas tersebut. Teknik ini dipilih karena mempertahankan distribusi data tanpa menghapus observasi apa pun, sehingga tetap menjaga ukuran sampel dan mengurangi distorsi akibat nilai pencilan.
+
 ### 4.5 Feature Engineering
 | Fitur Baru                | Deskripsi                                              |
 | ------------------------- | ------------------------------------------------------ |
@@ -153,6 +160,15 @@ Pada tahap imputasi missing value, digunakan metode **KNNImputer** dengan 5 teta
 
 
 ### 4.6 Split Data untuk Pelatihan
+
+```python
+X = df_imputed.drop(columns=['stroke'])
+y = df_imputed['stroke']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+```
+
+Dataset yang telah dibersihkan kemudian dipisahkan menjadi fitur (`X`) dan label target (`y`), di mana label target adalah kolom `stroke`. Selanjutnya, data dibagi menjadi data latih dan data uji menggunakan fungsi `train_test_split` dengan proporsi 80% untuk pelatihan dan 20% untuk pengujian. Parameter `stratify=y` digunakan untuk memastikan distribusi kelas pada data latih dan data uji tetap seimbang, terutama karena label `stroke` memiliki distribusi yang tidak seimbang. Penggunaan `random_state=42` memastikan reprodusibilitas hasil.
 
 ---
 
