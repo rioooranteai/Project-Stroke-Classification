@@ -99,16 +99,19 @@ Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle ([https:
 
 ## 4. Data Preparation
 ### 4.1 Drop Kolom yang Tidak Relevan (ID, Duplikat)
+Terdapat dua bagian utama dalam data preparation tahap 1:
 
-```python
-df_prep = df_prep.drop(columns=['id'])  
-df_prep = df_prep.drop_duplicates()
-```
 * **Menghapus kolom tidak relevan:**
   Kolom `id` merupakan identifier unik yang tidak memberikan informasi prediktif terhadap risiko stroke, sehingga dihapus dari dataset.
 
 * **Menghapus duplikasi data:**
   Data duplikat dapat menyebabkan model bias terhadap nilai yang berulang dan mengganggu distribusi data. Oleh karena itu, dilakukan penghapusan data duplikat untuk meningkatkan kualitas dataset.
+
+
+```python
+df_prep = df_prep.drop(columns=['id'])  
+df_prep = df_prep.drop_duplicates()
+```
 
 ### 4.2 Encoding Variabel Kategorikal
 
@@ -131,21 +134,22 @@ df_prep = pd.get_dummies(df_prep, columns=['work_type'], drop_first=True, prefix
 
 ### 4.3 Menangani Missing Values
 
+Pada tahap imputasi missing value, digunakan metode **KNNImputer** dengan 5 tetangga terdekat untuk mengisi nilai kosong, khususnya pada kolom `bmi`. Metode ini dipilih karena mampu mempertimbangkan kemiripan antar data dalam mengisi nilai yang hilang, sehingga lebih akurat dibandingkan imputasi sederhana seperti mean atau median global. Dengan pendekatan ini, nilai yang hilang diisi berdasarkan rata-rata nilai dari data terdekat yang serupa, sehingga menjaga konsistensi pola dalam dataset.
+
 ```python
 imputer = KNNImputer(n_neighbors=5)  
 bmi_imputed = imputer.fit_transform(df_prep)
 df_imputed = pd.DataFrame(bmi_imputed, columns=df_prep.columns)
 ```
-Pada tahap imputasi missing value, digunakan metode **KNNImputer** dengan 5 tetangga terdekat untuk mengisi nilai kosong, khususnya pada kolom `bmi`. Metode ini dipilih karena mampu mempertimbangkan kemiripan antar data dalam mengisi nilai yang hilang, sehingga lebih akurat dibandingkan imputasi sederhana seperti mean atau median global. Dengan pendekatan ini, nilai yang hilang diisi berdasarkan rata-rata nilai dari data terdekat yang serupa, sehingga menjaga konsistensi pola dalam dataset.
 
 ### 4.4 Menangani Outlier
+
+Dalam tahap pembersihan data, dilakukan proses winsorizing pada dua fitur kontinu, yaitu `avg_glucose_level` dan `bmi`, untuk mengurangi pengaruh outlier ekstrem yang dapat mengganggu performa model machine learning. Metode winsorize menggantikan nilai-nilai ekstrem di bawah persentil 5 dan di atas persentil 95 dengan nilai-nilai batas tersebut. Teknik ini dipilih karena mempertahankan distribusi data tanpa menghapus observasi apa pun, sehingga tetap menjaga ukuran sampel dan mengurangi distorsi akibat nilai pencilan.
 
 ```python
 con_columns = ['avg_glucose_level', 'bmi']
 df_imputed[con_columns] = df_imputed[con_columns].apply(lambda x: winsorize(x, (0.05, 0.05)))
 ```
-
-Dalam tahap pembersihan data, dilakukan proses winsorizing pada dua fitur kontinu, yaitu `avg_glucose_level` dan `bmi`, untuk mengurangi pengaruh outlier ekstrem yang dapat mengganggu performa model machine learning. Metode winsorize menggantikan nilai-nilai ekstrem di bawah persentil 5 dan di atas persentil 95 dengan nilai-nilai batas tersebut. Teknik ini dipilih karena mempertahankan distribusi data tanpa menghapus observasi apa pun, sehingga tetap menjaga ukuran sampel dan mengurangi distorsi akibat nilai pencilan.
 
 ### 4.5 Feature Engineering
 | Fitur Baru                | Deskripsi                                              |
@@ -161,15 +165,14 @@ Dalam tahap pembersihan data, dilakukan proses winsorizing pada dua fitur kontin
 
 ### 4.6 Split Data untuk Pelatihan
 
+Dataset yang telah dibersihkan kemudian dipisahkan menjadi fitur (`X`) dan label target (`y`), di mana label target adalah kolom `stroke`. Selanjutnya, data dibagi menjadi data latih dan data uji menggunakan fungsi `train_test_split` dengan proporsi 80% untuk pelatihan dan 20% untuk pengujian. Parameter `stratify=y` digunakan untuk memastikan distribusi kelas pada data latih dan data uji tetap seimbang, terutama karena label `stroke` memiliki distribusi yang tidak seimbang. Penggunaan `random_state=42` memastikan reprodusibilitas hasil.
+
 ```python
 X = df_imputed.drop(columns=['stroke'])
 y = df_imputed['stroke']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 ```
-
-Dataset yang telah dibersihkan kemudian dipisahkan menjadi fitur (`X`) dan label target (`y`), di mana label target adalah kolom `stroke`. Selanjutnya, data dibagi menjadi data latih dan data uji menggunakan fungsi `train_test_split` dengan proporsi 80% untuk pelatihan dan 20% untuk pengujian. Parameter `stratify=y` digunakan untuk memastikan distribusi kelas pada data latih dan data uji tetap seimbang, terutama karena label `stroke` memiliki distribusi yang tidak seimbang. Penggunaan `random_state=42` memastikan reprodusibilitas hasil.
-
 ---
 
 ## 5. Modeling
@@ -184,6 +187,22 @@ Dataset yang telah dibersihkan kemudian dipisahkan menjadi fitur (`X`) dan label
 | **Accuracy**     |           |        | **0.94** | 1022    |
 | **Macro Avg**    | 0.65      | 0.59   | 0.61     | 1022    |
 | **Weighted Avg** | 0.93      | 0.94   | 0.93     | 1022    |
+
+Tabel di atas merupakan hasil dari evaluasi model menggunakan fungsi *classification report* pada data uji. Fokus utama evaluasi diarahkan pada nilai **F1 Score Macro**, karena metrik ini memberikan gambaran menyeluruh terhadap performa model pada setiap kelas tanpa terpengaruh oleh ketidakseimbangan distribusi kelas. Dalam kasus prediksi stroke, jumlah data pasien tanpa stroke jauh lebih banyak dibandingkan pasien yang mengalami stroke, sehingga metrik seperti *accuracy* saja tidak cukup mewakili performa model secara adil.
+
+F1 Score Macro menghitung rata-rata *F1 Score* dari setiap kelas secara **tidak berbobot**, sehingga performa pada kelas minoritas tetap diperhitungkan secara setara. Adapun rumus F1 Score untuk satu kelas adalah:
+
+$$
+F1 = 2 \cdot \frac{precision \cdot recall}{precision + recall}
+$$
+
+Kemudian untuk **F1 Score Macro**, dilakukan rata-rata dari F1 setiap kelas:
+
+$$
+F1_{macro} = \frac{1}{N} \sum_{i=1}^{N} F1_i
+$$
+
+dengan $N$ adalah jumlah kelas dan $F1_i$ adalah skor F1 dari kelas ke-$i$. Pendekatan ini sangat relevan ketika ingin memastikan bahwa model tidak mengabaikan performa pada kelas yang minoritas, seperti kasus positif stroke. 
 
 ### 6.2 Confusion Matrix
 ![Confusion Matrix](Images/Conf.png)
