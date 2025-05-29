@@ -51,7 +51,7 @@ Melalui proyek ini, penulis mencoba membangun sebuah model prediktif sederhana n
 
 ## 3. Data Understanding
 
-Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle ([https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset](https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset). Terdiri atas 5.110 entri data dengan 2 kelas.
+Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle [https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset](https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset). Terdiri atas 5.110 entri data dengan 2 kelas.
 
 ### 3.1 Deskripsi Dataset
 | No. | Kolom               | Tipe Data | Jumlah Non-Null | Deskripsi                                                     |
