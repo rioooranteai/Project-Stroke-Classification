@@ -136,8 +136,10 @@ Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle ([https:
 | **Weighted Avg** | 0.93      | 0.94   | 0.93     | 1022    |
 
 ### 6.2 Confusion Matrix
+![Confusion Matrix](Images/Conf.png)
 
 ### 6.3 ROV Curve
+![ROV Curve](Images/AUC.png)
 
 ## Referensi
 
