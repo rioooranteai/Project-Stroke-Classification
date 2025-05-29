@@ -124,6 +124,21 @@ Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle ([https:
 
 ## 5. Modeling
 
+## 6. Evaluasi
+
+### 6.1 Classification Report
+| Label            | Precision | Recall | F1-Score | Support |
+| ---------------- | --------- | ------ | -------- | ------- |
+| Non-Stroke       | 0.96      | 0.98   | 0.97     | 972     |
+| Stroke           | 0.33      | 0.20   | 0.25     | 50      |
+| **Accuracy**     |           |        | **0.94** | 1022    |
+| **Macro Avg**    | 0.65      | 0.59   | 0.61     | 1022    |
+| **Weighted Avg** | 0.93      | 0.94   | 0.93     | 1022    |
+
+### 6.2 Confusion Matrix
+
+### 6.3 ROV Curve
+
 ## Referensi
 
 [1] World Health Organization. (2018). The top 10 causes of death.  
