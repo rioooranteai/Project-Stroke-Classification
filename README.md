@@ -53,6 +53,22 @@ Melalui proyek ini, penulis mencoba membangun sebuah model prediktif sederhana n
 
 Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle ([https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset](https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset). Terdiri atas 5.110 entri data dengan 2 kelas.
 
+### 3.1 Deskripsi Dataset
+| No. | Kolom               | Tipe Data | Jumlah Non-Null | Deskripsi                                                     |
+| --- | ------------------- | --------- | --------------- | ------------------------------------------------------------- |
+| 1   | `id`                | int64     | 5110            | ID unik untuk setiap data pasien                              |
+| 2   | `gender`            | object    | 5110            | Jenis kelamin pasien                                          |
+| 3   | `age`               | float64   | 5110            | Usia pasien                                                   |
+| 4   | `hypertension`      | int64     | 5110            | 1 jika pasien memiliki hipertensi, 0 jika tidak               |
+| 5   | `heart_disease`     | int64     | 5110            | 1 jika pasien memiliki penyakit jantung, 0 jika tidak         |
+| 6   | `ever_married`      | object    | 5110            | Status pernikahan pasien                                      |
+| 7   | `work_type`         | object    | 5110            | Jenis pekerjaan pasien                                        |
+| 8   | `Residence_type`    | object    | 5110            | Jenis tempat tinggal: Urban (perkotaan) atau Rural (pedesaan) |
+| 9   | `avg_glucose_level` | float64   | 5110            | Rata-rata kadar glukosa dalam darah                           |
+| 10  | `bmi`               | float64   | 4909            | Indeks Massa Tubuh (BMI) pasien                               |
+| 11  | `smoking_status`    | object    | 5110            | Status merokok pasien (tidak pernah, pernah, merokok, dll.)   |
+| 12  | `stroke`            | int64     | 5110            | Target: 1 jika pasien pernah mengalami stroke, 0 jika belum   |
+
 ## Referensi
 
 [1] World Health Organization. (2018). The top 10 causes of death.  
