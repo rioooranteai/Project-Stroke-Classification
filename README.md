@@ -100,7 +100,10 @@ Dataset yang digunakan adalah **Stroke Prediction Dataset** dari Kaggle ([https:
 ## 4. Data Preparation
 ### 4.1 Drop Kolom yang Tidak Relevan (ID, Duplikat)
 
-<pre> ```python # ini adalah contoh kode Python df_prep = df_prep.drop(columns=['id']) df_prep = df_prep.drop_duplicates() ``` </pre>
+```python
+df_prep = df_prep.drop(columns=['id'])  
+df_prep = df_prep.drop_duplicates()
+```
 
 ### 4.2 Menangani Missing Values
 
