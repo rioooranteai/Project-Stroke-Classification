@@ -162,6 +162,9 @@ df_imputed[con_columns] = df_imputed[con_columns].apply(lambda x: winsorize(x, (
 ```
 
 ### 4.5 Feature Engineering
+
+Membuat beberapa fitur baru dengan mengelompokkan usia ke dalam kategori, serta menggabungkan atau mengalikan beberapa variabel seperti kadar glukosa, BMI, usia, status merokok, hipertensi, penyakit jantung, jenis kelamin, dan status pekerjaan. Tujuannya adalah untuk menangkap interaksi dan kondisi risiko kesehatan yang mungkin penting untuk analisis atau pemodelan, sehingga data menjadi lebih informatif dan membantu model mengenali pola yang lebih kompleks.
+
 | Fitur Baru                | Deskripsi                                              |
 | ------------------------- | ------------------------------------------------------ |
 | `age_group`               | Kategori usia (muda, dewasa, lansia)                   |
