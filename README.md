@@ -34,9 +34,11 @@ Melalui proyek ini, penulis mencoba membangun sebuah model prediktif sederhana n
 ### 2.2 Goals
 
 * **Goals 1**
+  
   Mengembangkan model prediksi risiko stroke berbasis machine learning yang dapat digunakan untuk membantu deteksi dini, dengan mempertimbangkan performa pada kedua kelas secara adil.
 
 * **Goals 2**
+  
   Menghasilkan model yang mampu mempertahankan performa prediksi pada kelas minoritas (stroke) agar dapat diimplementasikan dalam sistem skrining kesehatan yang akurat dan dapat diandalkan.
 
 ---
@@ -44,12 +46,15 @@ Melalui proyek ini, penulis mencoba membangun sebuah model prediktif sederhana n
 ### 2.3 Solution Statements
 
 * **Solution Statement 1**
+  
   Mengimplementasikan beberapa algoritma klasifikasi berbasis pohon keputusan seperti **Random Forest**, **Gradient Boosting (XGBoost, LightGBM, CatBoost)**, dan **Decision Tree**, yang dikenal efektif untuk data tabular dan memiliki fleksibilitas dalam menangani fitur non-linear serta mendukung interpretabilitas. 
 
 * **Solution Statement 2**
+  
   Melakukan **hyperparameter tuning** menggunakan framework Optuna untuk meningkatkan kinerja model, dengan fokus pada metrik evaluasi **F1 Score (macro average)**, guna menangani ketidakseimbangan kelas serta meningkatkan deteksi pada kasus stroke.
 
 * **Solution Statement 3**
+  
   Menerapkan teknik evaluasi berbasis **confusion matrix** dan **classification report** dan **Kurva ROC**, serta memilih model terbaik berdasarkan **F1 Score macro** sebagai tolok ukur utama, karena metrik ini menghitung performa model secara setara untuk semua kelas dan relevan dalam konteks medis yang menuntut keakuratan tinggi pada kelas minoritas.
 
 ---
