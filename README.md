@@ -22,9 +22,11 @@ Melalui proyek ini, penulis mencoba membangun sebuah model prediktif sederhana n
 ### 2.1 Problem Statements
 
 * **Problem Statements 1**
+  
   Penyakit stroke merupakan salah satu penyebab kematian tertinggi di Indonesia, namun teknologi sistem deteksi dini yang andal dan efektif masih minim. Hal ini menyebabkan banyak kasus baru teridentifikasi ketika kondisi pasien sudah kronis dan sulit ditangani secara preventif.
 
 * **Problem Statements 2**
+  
   Karakteristik data kesehatan yang tidak seimbang, di mana jumlah pasien non-stroke jauh lebih besar dibandingkan pasien stroke, membuat sebagian besar model machine learning cenderung bias terhadap kelas mayoritas. Hal ini mengakibatkan tingginya kesalahan dalam mendeteksi pasien yang sebenarnya memiliki risiko stroke.
 
 ---
@@ -42,13 +44,13 @@ Melalui proyek ini, penulis mencoba membangun sebuah model prediktif sederhana n
 ### 2.3 Solution Statements
 
 * **Solution Statement 1**
-  Mengimplementasikan beberapa algoritma klasifikasi berbasis pohon keputusan seperti **Random Forest**, **Gradient Boosting (XGBoost, LightGBM, CatBoost)**, dan **Decision Tree**, yang dikenal efektif untuk data tabular medis dan memiliki fleksibilitas dalam menangani fitur non-linear serta mendukung interpretabilitas.
+  Mengimplementasikan beberapa algoritma klasifikasi berbasis pohon keputusan seperti **Random Forest**, **Gradient Boosting (XGBoost, LightGBM, CatBoost)**, dan **Decision Tree**, yang dikenal efektif untuk data tabular dan memiliki fleksibilitas dalam menangani fitur non-linear serta mendukung interpretabilitas. 
 
 * **Solution Statement 2**
   Melakukan **hyperparameter tuning** menggunakan framework Optuna untuk meningkatkan kinerja model, dengan fokus pada metrik evaluasi **F1 Score (macro average)**, guna menangani ketidakseimbangan kelas serta meningkatkan deteksi pada kasus stroke.
 
 * **Solution Statement 3**
-  Menerapkan teknik evaluasi berbasis **confusion matrix** dan **classification report**, serta memilih model terbaik berdasarkan **F1 Score macro** sebagai tolok ukur utama, karena metrik ini menghitung performa model secara setara untuk semua kelas dan relevan dalam konteks medis yang menuntut keakuratan tinggi pada kelas minoritas.
+  Menerapkan teknik evaluasi berbasis **confusion matrix** dan **classification report** dan **Kurva ROC**, serta memilih model terbaik berdasarkan **F1 Score macro** sebagai tolok ukur utama, karena metrik ini menghitung performa model secara setara untuk semua kelas dan relevan dalam konteks medis yang menuntut keakuratan tinggi pada kelas minoritas.
 
 ---
 
