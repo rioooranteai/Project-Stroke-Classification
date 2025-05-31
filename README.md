@@ -45,7 +45,7 @@ Melalui proyek ini, penulis mencoba membangun sebuah model prediktif sederhana n
   Mengimplementasikan beberapa algoritma klasifikasi berbasis pohon keputusan seperti **Random Forest**, **Gradient Boosting (XGBoost, LightGBM, CatBoost)**, dan **Decision Tree**, yang dikenal efektif untuk data tabular medis dan memiliki fleksibilitas dalam menangani fitur non-linear serta mendukung interpretabilitas.
 
 * **Solution Statement 2**
-  Melakukan **hyperparameter tuning** menggunakan framework Optuna untuk meningkatkan kinerja model, dengan fokus pada metrik evaluasi **F1 Score (macro average)** dan **ROC-AUC**, guna menangani ketidakseimbangan kelas serta meningkatkan deteksi pada kasus stroke.
+  Melakukan **hyperparameter tuning** menggunakan framework Optuna untuk meningkatkan kinerja model, dengan fokus pada metrik evaluasi **F1 Score (macro average)**, guna menangani ketidakseimbangan kelas serta meningkatkan deteksi pada kasus stroke.
 
 * **Solution Statement 3**
   Menerapkan teknik evaluasi berbasis **confusion matrix** dan **classification report**, serta memilih model terbaik berdasarkan **F1 Score macro** sebagai tolok ukur utama, karena metrik ini menghitung performa model secara setara untuk semua kelas dan relevan dalam konteks medis yang menuntut keakuratan tinggi pada kelas minoritas.
