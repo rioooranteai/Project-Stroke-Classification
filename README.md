@@ -206,7 +206,7 @@ RandomForestClassifier(random_state=42)
 ```
 
 * `random_state=42`: Menjamin reprodusibilitas.
-* Parameter lain menggunakan nilai default, seperti:
+* Untuk parameter lainnya menggunakan nilai default, seperti:
 
   * `n_estimators=100`: Jumlah pohon dalam forest.
   * `criterion='gini'`: Ukuran pemisahan berdasarkan impurity Gini.
@@ -239,7 +239,7 @@ DecisionTreeClassifier(random_state=42)
 ```
 
 * `random_state=42`: Untuk reprodusibilitas hasil.
-* Parameter lain default:
+* Untuk parameter lainnya menggunakan nilai default, seperti:
 
   * `criterion='gini'`: Ukuran pemisahan berdasarkan impurity Gini.
   * `max_depth=None`: Kedalaman maksimum pohon; `None` berarti tanpa batas.
@@ -274,7 +274,7 @@ XGBClassifier(use_label_encoder=False, eval_metric='logloss', random_state=42)
 * `use_label_encoder=False`: Mencegah warning pada versi baru XGBoost.
 * `eval_metric='logloss'`: Metrik evaluasi selama training.
 * `random_state=42`: Untuk reprodusibilitas.
-* Parameter lain menggunakan default:
+* Untuk parameter lainnya menggunakan nilai default, seperti:
 
   * `n_estimators=100`: Jumlah pohon yang dibangun secara berurutan.
   * `eta=0.3`: `learning_rate`; Mengontrol kontribusi setiap pohon terhadap model akhir.
@@ -308,7 +308,7 @@ LGBMClassifier(random_state=42, verbose=-1)
 
 * `random_state=42`: Konsistensi hasil.
 * `verbose=-1`: Menonaktifkan output selama pelatihan.
-* Parameter lain default:
+* Untuk parameter lainnya menggunakan nilai default, seperti:
 
   * `n_estimators=100`: Jumlah boosting round (jumlah pohon yang akan dibangun).
   * `learning_rate=0.1`: Learning rate; mengontrol kontribusi tiap pohon terhadap prediksi akhir.
@@ -342,7 +342,7 @@ CatBoostClassifier(verbose=0, random_state=42)
 
 * `verbose=0`: Menonaktifkan output training.
 * `random_state=42`: Untuk konsistensi hasil.
-* Parameter lain default:
+* Untuk parameter lainnya menggunakan nilai default, seperti:
   
   * `iterations=1000`: Jumlah boosting round atau pohon yang akan dibangun.
   * `learning_rate=0.03`: Ukuran langkah dalam proses boosting (semakin kecil, semakin lambat tapi stabil).
@@ -361,7 +361,7 @@ CatBoostClassifier(verbose=0, random_state=42)
 * Dokumentasi handling imbalance masih terbatas.
 * Training bisa lebih lama.
 * Bisa underperform jika parameter tidak disesuaikan.
-
+---
 #### Evaluasi Awal Model
 
 Semua model dievaluasi menggunakan skema:
