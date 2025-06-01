@@ -422,11 +422,11 @@ model_dt.fit(X_train, y_train)
 
 **Parameter terbaik:**
 
-* `criterion='entropy'`: Memilih split berdasarkan *information gain*
-* `max_depth=14`: Membatasi kedalaman untuk mencegah overfitting
-* `min_samples_split=9`: Membatasi pembelahan jika data terlalu sedikit
-* `min_samples_leaf=7`: Menjaga agar setiap daun tidak hanya berisi data minoritas/noise
-* `max_features=None`: Semua fitur dipertimbangkan dalam setiap split
+* `criterion='entropy'`
+* `max_depth=14`
+* `min_samples_split=9`
+* `min_samples_leaf=7`
+* `max_features=None`
 
 ## 6. Evaluasi
 
