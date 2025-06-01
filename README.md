@@ -210,6 +210,9 @@ RandomForestClassifier(random_state=42)
 
   * `n_estimators=100`: Jumlah pohon dalam forest.
   * `criterion='gini'`: Ukuran pemisahan berdasarkan impurity Gini.
+  * `max_depth=None`: Kedalaman maksimum pohon; `None` berarti tanpa batas.
+  * `min_samples_split=2`: Minimal sampel untuk membagi node internal.
+  * `min_samples_leaf=1`: Minimal sampel yang harus ada di tiap daun.
 
 **Kelebihan:**
 
@@ -238,10 +241,11 @@ DecisionTreeClassifier(random_state=42)
 * `random_state=42`: Untuk reprodusibilitas hasil.
 * Parameter lain default:
 
-  * `criterion='gini'`
-  * `max_depth=None`
-  * `min_samples_split=2`
-  * `min_samples_leaf=1`
+  * `criterion='gini'`: Ukuran pemisahan berdasarkan impurity Gini.
+  * `max_depth=None`: Kedalaman maksimum pohon; `None` berarti tanpa batas.
+  * `min_samples_split=2`: Minimal sampel untuk membagi node internal.
+  * `min_samples_leaf=1`: Minimal sampel yang harus ada di tiap daun.
+  * `max_features=None`: Semua fitur digunakan saat mencari pemisahan terbaik.
 
 **Kelebihan:**
 
@@ -272,7 +276,11 @@ XGBClassifier(use_label_encoder=False, eval_metric='logloss', random_state=42)
 * `random_state=42`: Untuk reprodusibilitas.
 * Parameter lain menggunakan default:
 
-  * `n_estimators=100`, `learning_rate=0.3`, `max_depth=6`
+  * `n_estimators=100`: Jumlah pohon yang dibangun secara berurutan.
+  * `eta=0.3`: `learning_rate`; Mengontrol kontribusi setiap pohon terhadap model akhir.
+  * `max_depth=6`: Kedalaman maksimum setiap pohon; mengontrol kompleksitas model.
+  * `min_child_weight=1`: Jumlah minimal bobot total (sum of instance weight) di anak node; mencegah overfitting.
+  * `gamma=0`: `min_split_loss`; Minimal loss reduction yang diperlukan untuk membagi node; `0` berarti tidak ada batasan tambahan.
 
 **Kelebihan:**
 
@@ -302,7 +310,11 @@ LGBMClassifier(random_state=42, verbose=-1)
 * `verbose=-1`: Menonaktifkan output selama pelatihan.
 * Parameter lain default:
 
-  * `n_estimators=100`, `learning_rate=0.1`, `boosting_type='gbdt'`
+  * `n_estimators=100`: Jumlah boosting round (jumlah pohon yang akan dibangun).
+  * `learning_rate=0.1`: Learning rate; mengontrol kontribusi tiap pohon terhadap prediksi akhir.
+  * `boosting_type='gbdt'`: Jenis boosting; `'gbdt'` adalah Gradient Boosting Decision Tree (default).
+  * `num_leaves=31`: Jumlah maksimum daun pada setiap pohon; mengontrol kompleksitas model.
+  * `class_weight=None`: Tidak ada penyesuaian bobot kelas; semua kelas dianggap setara.
 
 **Kelebihan:**
 
@@ -331,8 +343,12 @@ CatBoostClassifier(verbose=0, random_state=42)
 * `verbose=0`: Menonaktifkan output training.
 * `random_state=42`: Untuk konsistensi hasil.
 * Parameter lain default:
-
-  * `iterations=1000`, `learning_rate=0.03`, `depth=6`
+  
+  * `iterations=1000`: Jumlah boosting round atau pohon yang akan dibangun.
+  * `learning_rate=0.03`: Ukuran langkah dalam proses boosting (semakin kecil, semakin lambat tapi stabil).
+  * `depth=6`: Kedalaman maksimum setiap pohon keputusan.
+  * `loss_function='Logloss'`: Fungsi kerugian default untuk klasifikasi biner.
+  * `l2_leaf_reg=3.0`: Regulasi L2 untuk mencegah overfitting.
 
 **Kelebihan:**
 
