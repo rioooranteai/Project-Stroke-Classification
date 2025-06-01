@@ -192,79 +192,163 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 ### 5.1 Model Selection
 
-Terdapat beberapa model yang akan dicoba dalam project ini, yaitu:
+Pada tahap ini, dilakukan evaluasi terhadap lima model machine learning untuk klasifikasi risiko stroke. Setiap model dievaluasi menggunakan **5-fold Stratified Cross Validation** dengan metrik **F1-score makro**, karena data bersifat tidak seimbang. Berikut penjelasan **cara kerja**, **parameter yang digunakan**, serta **kelebihan dan kekurangan** masing-masing model:
 
 #### 1. **Random Forest**
 
-* **Kelebihan:**
+**Cara kerja:**
+Random Forest adalah ensemble learning method berbasis Decision Tree. Model ini membangun banyak pohon keputusan (trees) dari subset data (bootstrap samples) dan subset fitur secara acak, kemudian menggabungkan prediksi pohon-pohon tersebut menggunakan voting (klasifikasi) atau rata-rata (regresi).
 
-  * Relatif robust terhadap data imbalance karena menggunakan agregasi dari banyak pohon keputusan.
-  * Dapat menangani overfitting lebih baik dibanding Decision Tree tunggal.
-  * Bisa menggunakan class weighting (`class_weight='balanced'`) untuk menangani ketidakseimbangan kelas.
+**Parameter yang digunakan:**
 
-* **Kekurangan:**
+```python
+RandomForestClassifier(random_state=42)
+```
 
-  * Tanpa penyesuaian, masih bisa bias terhadap kelas mayoritas.
-  * Interpretasi hasil lebih sulit dibanding pohon tunggal.
-  * Cenderung memiliki F1-score rendah jika tidak disesuaikan untuk minoritas.
+* `random_state=42`: Menjamin reprodusibilitas.
+* Parameter lain menggunakan nilai default, seperti:
+
+  * `n_estimators=100`: Jumlah pohon dalam forest.
+  * `criterion='gini'`: Ukuran pemisahan berdasarkan impurity Gini.
+
+**Kelebihan:**
+
+* Robus terhadap overfitting.
+* Dapat menangani data tidak seimbang melalui agregasi.
+* Mendukung `class_weight='balanced'` jika diperlukan.
+
+**Kekurangan:**
+
+* Bisa tetap bias terhadap kelas mayoritas tanpa penyesuaian eksplisit.
+* Interpretasi model sulit.
+* F1-score untuk kelas minoritas bisa rendah.
+
 
 #### 2. **Decision Tree**
 
-* **Kelebihan:**
+**Cara kerja:**
+Decision Tree membuat model pohon dengan memisahkan data berdasarkan fitur yang memberikan *information gain* atau pengurangan impurity terbesar. Setiap simpul pohon merupakan keputusan berbasis nilai fitur tertentu.
 
-  * Sangat mudah diinterpretasikan dan divisualisasikan.
-  * Cepat dalam pelatihan dan prediksi.
-  * Bisa diatur untuk memperhatikan kelas minoritas dengan pengaturan `class_weight`.
+**Parameter yang digunakan:**
 
-* **Kekurangan:**
+```python
+DecisionTreeClassifier(random_state=42)
+```
 
-  * Rentan terhadap overfitting terutama pada data kecil atau tidak seimbang.
-  * Tanpa penyesuaian, cenderung mengabaikan kelas minoritas seperti stroke.
-  * Performanya sangat tergantung pada hyperparameter dan pruning.
+* `random_state=42`: Untuk reprodusibilitas hasil.
+* Parameter lain default:
+
+  * `criterion='gini'`
+  * `max_depth=None`
+  * `min_samples_split=2`
+  * `min_samples_leaf=1`
+
+**Kelebihan:**
+
+* Mudah diinterpretasikan dan divisualisasikan.
+* Cepat dalam pelatihan dan prediksi.
+* Mendukung pengaturan `class_weight` untuk kelas minoritas.
+
+**Kekurangan:**
+
+* Rentan overfitting.
+* Cenderung bias ke kelas mayoritas jika tidak disesuaikan.
+* Performa tergantung hyperparameter dan pruning.
 
 
 #### 3. **XGBoost**
 
-* **Kelebihan:**
+**Cara kerja:**
+XGBoost (Extreme Gradient Boosting) adalah algoritma boosting yang membangun model secara bertahap, memperbaiki kesalahan dari model sebelumnya menggunakan **gradient descent pada fungsi loss**. Model ini juga dilengkapi regularisasi untuk mencegah overfitting.
 
-  * Model boosting yang kuat untuk menangani dataset tidak seimbang menggunakan parameter seperti `scale_pos_weight`.
-  * Lebih stabil dan akurat dibanding pohon tunggal dalam data yang kompleks.
-  * Memiliki fitur regularisasi yang mengurangi overfitting.
+**Parameter yang digunakan:**
 
-* **Kekurangan:**
+```python
+XGBClassifier(use_label_encoder=False, eval_metric='logloss', random_state=42)
+```
 
-  * Butuh tuning parameter yang teliti agar bisa menangani data imbalance dengan baik.
-  * Lebih lambat dibanding model yang lebih ringan seperti Decision Tree.
-  * Interpretasi model lebih sulit.
+* `use_label_encoder=False`: Mencegah warning pada versi baru XGBoost.
+* `eval_metric='logloss'`: Metrik evaluasi selama training.
+* `random_state=42`: Untuk reprodusibilitas.
+* Parameter lain menggunakan default:
+
+  * `n_estimators=100`, `learning_rate=0.3`, `max_depth=6`
+
+**Kelebihan:**
+
+* Sangat kuat untuk data kompleks dan tidak seimbang.
+* Mendukung `scale_pos_weight` untuk menangani ketidakseimbangan.
+* Memiliki regularisasi (`reg_alpha`, `reg_lambda`).
+
+**Kekurangan:**
+
+* Membutuhkan tuning parameter.
+* Waktu pelatihan lebih lama dibanding model sederhana.
+* Interpretasi lebih kompleks.
+
 
 #### 4. **LightGBM**
 
-* **Kelebihan:**
+**Cara kerja:**
+LightGBM adalah framework gradient boosting yang membangun pohon berdasarkan **leaf-wise growth** (bukan level-wise). Ini membuatnya sangat cepat dan efisien untuk dataset besar.
 
-  * Cepat dalam pelatihan dan cocok untuk dataset besar.
-  * Menyediakan parameter `is_unbalance=True` atau `scale_pos_weight` untuk menangani ketidakseimbangan kelas.
-  * Hemat memori dan mendukung categorical feature secara native.
+**Parameter yang digunakan:**
 
-* **Kekurangan:**
+```python
+LGBMClassifier(random_state=42, verbose=-1)
+```
 
-  * Bisa sangat bias terhadap kelas mayoritas jika tidak dituning untuk imbalance.
-  * Kurang optimal pada dataset kecil.
-  * Sensitif terhadap outlier atau data minoritas yang ekstrem.
+* `random_state=42`: Konsistensi hasil.
+* `verbose=-1`: Menonaktifkan output selama pelatihan.
+* Parameter lain default:
+
+  * `n_estimators=100`, `learning_rate=0.1`, `boosting_type='gbdt'`
+
+**Kelebihan:**
+
+* Pelatihan sangat cepat.
+* Dukungan native untuk fitur kategori.
+* Mendukung `is_unbalance=True` atau `scale_pos_weight`.
+
+**Kekurangan:**
+
+* Sensitif terhadap data kecil.
+* Rentan bias terhadap kelas mayoritas jika tidak diatur.
+* Kurang optimal pada data ekstrem.
+
 
 #### 5. **CatBoost**
 
-* **Kelebihan:**
+**Cara kerja:**
+CatBoost adalah boosting algoritma berbasis gradient descent yang mengoptimalkan logloss atau fungsi loss lain. Ia dirancang khusus untuk fitur kategori, menggunakan teknik **Ordered Boosting** agar tidak overfitting.
 
-  * Menangani categorical feature secara otomatis dan efisien.
-  * Bisa menangani ketidakseimbangan kelas menggunakan parameter `scale_pos_weight`.
-  * Lebih stabil pada data kecil dan sedikit preprocessing.
+**Parameter yang digunakan:**
 
-* **Kekurangan:**
+```python
+CatBoostClassifier(verbose=0, random_state=42)
+```
 
-  * Cenderung underperform pada data sangat imbalance jika tidak diatur secara eksplisit.
-  * Training bisa lebih lama dibanding model lain seperti LightGBM.
-  * Dokumentasi untuk penanganan imbalance tidak selengkap XGBoost atau LightGBM.
+* `verbose=0`: Menonaktifkan output training.
+* `random_state=42`: Untuk konsistensi hasil.
+* Parameter lain default:
 
+  * `iterations=1000`, `learning_rate=0.03`, `depth=6`
+
+**Kelebihan:**
+
+* Menangani fitur kategori secara otomatis.
+* Stabil pada dataset kecil.
+* Mendukung `scale_pos_weight` untuk ketidakseimbangan.
+
+**Kekurangan:**
+
+* Dokumentasi handling imbalance masih terbatas.
+* Training bisa lebih lama.
+* Bisa underperform jika parameter tidak disesuaikan.
+
+#### Evaluasi Awal Model
+
+Semua model dievaluasi menggunakan skema:
 
 ```python
 models = {
@@ -286,33 +370,47 @@ for name, model in models.items():
 sorted_models_non_umap = sorted(model_scores_non_umap.items(), key=lambda x: x[1], reverse=True)
 ```
 
-Berikut adalah hasilnya:
+**Hasil F1-score (makro):**
 
-| Model        | F1-weighted Score |
-| ------------ | ----------------- |
-| RandomForest | 0.4873            |
-| DecisionTree | 0.5382            |
-| XGBoost      | 0.5226            |
-| LightGBM     | 0.5064            |
-| CatBoost     | 0.5044            |
+| Model        | F1-score (Makro) |
+| ------------ | ---------------- |
+| DecisionTree | 0.5382           |
+| XGBoost      | 0.5226           |
+| LightGBM     | 0.5064           |
+| CatBoost     | 0.5044           |
+| RandomForest | 0.4873           |
 
-Berdasarkan hasil diatas, maka model yang akan masuk ke tahapan improvement melalui hyperparameter adalah Decision Tree.
+**Model terbaik:**
+Berdasarkan skor tertinggi, **Decision Tree** dipilih untuk tahap **hyperparameter tuning** lebih lanjut.
 
 ### 5.2 Hyperparameter Tuning
-Tahapan **hyperparameter tuning** menggunakan **Optuna** pada model **DecisionTreeClassifier**, dengan tujuan memaksimalkan **F1-score makro**. Berikut penjelasan singkat alurnya:
 
-Fungsi `objective(trial)` mendefinisikan ruang pencarian parameter, seperti `criterion`, `max_depth`, `min_samples_split`, dan lainnya. Optuna akan mencoba berbagai kombinasi nilai-nilai ini. Model yang dihasilkan akan dilatih menggunakan data latih (`X_train`, `y_train`) dan diuji di data uji (`X_test`). Nilai yang dikembalikan untuk optimasi adalah **F1-score dengan rata-rata makro**, yang cocok untuk data tidak seimbang karena memperlakukan tiap kelas secara setara.
+Hyperparameter tuning dilakukan menggunakan **Optuna** dengan tujuan memaksimalkan **F1-score makro**. Parameter yang dituning antara lain:
 
-`optuna.create_study(...)` membuat studi optimasi dengan strategi **TPE (Tree-structured Parzen Estimator)** dan menggunakan **MedianPruner**, yaitu teknik untuk menghentikan percobaan yang tidak menjanjikan lebih awal. `study.optimize(...)` akan menjalankan proses pencarian selama **maksimal 100 percobaan atau 1 jam (3600 detik)**.
+* `criterion` (fungsi impurity): `'gini'` atau `'entropy'`
+* `max_depth`: Kedalaman maksimum pohon
+* `min_samples_split`: Jumlah minimum sampel untuk split
+* `min_samples_leaf`: Minimum sampel per daun
+* `max_features`: Jumlah fitur yang dipertimbangkan saat split
+
+Optimasi dilakukan selama maksimal **100 percobaan atau 1 jam**, dengan strategi **TPE** dan **MedianPruner** untuk efisiensi.
 
 ### 5.3 Train Model dengan Parameter Terbaik
 
-Model DecisionTreeClassifier yang dilatih menggunakan parameter `criterion='entropy'` yang memilih pemisahan berdasarkan informasi terbanyak (information gain), membantu model membuat keputusan yang lebih informatif. Dengan `max_depth=14`, kedalaman pohon dibatasi agar tidak overfitting, sementara `min_samples_split=9` dan `min_samples_leaf=7` mengontrol ukuran minimal data yang boleh dibagi dan yang harus ada di tiap daun, menjaga agar pemodelan tidak terlalu mengikuti noise dari data minoritas. Parameter `max_features=None` berarti semua fitur akan dipertimbangkan saat mencari pemisahan terbaik, memungkinkan model memanfaatkan informasi secara maksimal. Kombinasi ini dirancang untuk menjaga keseimbangan antara akurasi dan generalisasi, terutama penting dalam konteks data tidak seimbang seperti kasus stroke.
+Model akhir dilatih menggunakan parameter hasil tuning:
 
 ```python
 model_dt = DecisionTreeClassifier(**study.best_params, random_state=42)
 model_dt.fit(X_train, y_train)
 ```
+
+**Parameter terbaik:**
+
+* `criterion='entropy'`: Memilih split berdasarkan *information gain*
+* `max_depth=14`: Membatasi kedalaman untuk mencegah overfitting
+* `min_samples_split=9`: Membatasi pembelahan jika data terlalu sedikit
+* `min_samples_leaf=7`: Menjaga agar setiap daun tidak hanya berisi data minoritas/noise
+* `max_features=None`: Semua fitur dipertimbangkan dalam setiap split
 
 ## 6. Evaluasi
 
