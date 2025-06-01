@@ -194,7 +194,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 Pada tahap ini, dilakukan evaluasi terhadap lima model machine learning untuk klasifikasi risiko stroke. Setiap model dievaluasi menggunakan **5-fold Stratified Cross Validation** dengan metrik **F1-score makro**, karena data bersifat tidak seimbang. Berikut penjelasan **cara kerja**, **parameter yang digunakan**, serta **kelebihan dan kekurangan** masing-masing model:
 
-#### 1. **Random Forest**
+#### A. **Random Forest**
 
 **Cara kerja:**
 Random Forest adalah ensemble learning method berbasis Decision Tree. Model ini membangun banyak pohon keputusan (trees) dari subset data (bootstrap samples) dan subset fitur secara acak, kemudian menggabungkan prediksi pohon-pohon tersebut menggunakan voting (klasifikasi) atau rata-rata (regresi).
@@ -224,7 +224,7 @@ RandomForestClassifier(random_state=42)
 * F1-score untuk kelas minoritas bisa rendah.
 
 
-#### 2. **Decision Tree**
+#### B. **Decision Tree**
 
 **Cara kerja:**
 Decision Tree membuat model pohon dengan memisahkan data berdasarkan fitur yang memberikan *information gain* atau pengurangan impurity terbesar. Setiap simpul pohon merupakan keputusan berbasis nilai fitur tertentu.
@@ -256,7 +256,7 @@ DecisionTreeClassifier(random_state=42)
 * Performa tergantung hyperparameter dan pruning.
 
 
-#### 3. **XGBoost**
+#### C. **XGBoost**
 
 **Cara kerja:**
 XGBoost (Extreme Gradient Boosting) adalah algoritma boosting yang membangun model secara bertahap, memperbaiki kesalahan dari model sebelumnya menggunakan **gradient descent pada fungsi loss**. Model ini juga dilengkapi regularisasi untuk mencegah overfitting.
@@ -287,7 +287,7 @@ XGBClassifier(use_label_encoder=False, eval_metric='logloss', random_state=42)
 * Interpretasi lebih kompleks.
 
 
-#### 4. **LightGBM**
+#### D. **LightGBM**
 
 **Cara kerja:**
 LightGBM adalah framework gradient boosting yang membangun pohon berdasarkan **leaf-wise growth** (bukan level-wise). Ini membuatnya sangat cepat dan efisien untuk dataset besar.
@@ -317,7 +317,7 @@ LGBMClassifier(random_state=42, verbose=-1)
 * Kurang optimal pada data ekstrem.
 
 
-#### 5. **CatBoost**
+#### E. **CatBoost**
 
 **Cara kerja:**
 CatBoost adalah boosting algoritma berbasis gradient descent yang mengoptimalkan logloss atau fungsi loss lain. Ia dirancang khusus untuk fitur kategori, menggunakan teknik **Ordered Boosting** agar tidak overfitting.
