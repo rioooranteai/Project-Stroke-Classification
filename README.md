@@ -422,11 +422,11 @@ model_dt.fit(X_train, y_train)
 
 **Parameter terbaik:**
 
-* `criterion='entropy'`
-* `max_depth=14`
-* `min_samples_split=9`
-* `min_samples_leaf=7`
-* `max_features=None`
+* `criterion='entropy'`: Pemisahan dilakukan berdasarkan **information gain**, bukan Gini impurity.
+* `max_depth=14`: Pohon dibatasi hingga **kedalaman 14** agar tidak overfitting.
+* `min_samples_split=9`: Node hanya akan dipecah jika terdapat **minimal 9 sampel**.
+* `min_samples_leaf=7`: Setiap daun pohon harus mengandung **minimal 7 sampel**.
+* `max_features=None`: Menggunakan **semua fitur** untuk menentukan pemisahan terbaik.
 
 ## 6. Evaluasi
 
