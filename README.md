@@ -55,7 +55,7 @@ Melalui proyek ini, penulis mencoba membangun sebuah model prediktif sederhana n
 
 * **Solution Statement 3**
   
-  Menerapkan teknik evaluasi berbasis **confusion matrix** dan **classification report** dan **Kurva ROC**, serta memilih model terbaik berdasarkan **F1 Score macro** sebagai tolok ukur utama, karena metrik ini menghitung performa model secara setara untuk semua kelas dan relevan dalam konteks medis yang menuntut keakuratan tinggi pada kelas minoritas.
+  Menerapkan teknik evaluasi berbasis **confusion matrix** dan **classification report** dan **Kurva ROC**, serta memilih model terbaik berdasarkan **F1-score macro** sebagai tolok ukur utama, karena metrik ini menghitung performa model secara setara untuk semua kelas dan relevan dalam konteks medis yang menuntut keakuratan tinggi pada kelas minoritas.
 
 ---
 
@@ -192,7 +192,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 ### 5.1 Model Selection
 
-Pada tahap ini, dilakukan evaluasi terhadap lima model machine learning untuk klasifikasi risiko stroke. Setiap model dievaluasi menggunakan **5-fold Stratified Cross Validation** dengan metrik **F1-score makro**, karena data bersifat tidak seimbang. Berikut penjelasan **cara kerja**, **parameter yang digunakan**, serta **kelebihan dan kekurangan** masing-masing model:
+Pada tahap ini, dilakukan evaluasi terhadap lima model machine learning untuk klasifikasi risiko stroke. Setiap model dievaluasi menggunakan **5-fold Stratified Cross Validation** dengan metrik **F1-score macro**, karena data bersifat tidak seimbang. Berikut penjelasan **cara kerja**, **parameter yang digunakan**, serta **kelebihan dan kekurangan** masing-masing model:
 
 #### A. **Random Forest**
 
@@ -370,9 +370,9 @@ for name, model in models.items():
 sorted_models_non_umap = sorted(model_scores_non_umap.items(), key=lambda x: x[1], reverse=True)
 ```
 
-**Hasil F1-score (makro):**
+**Hasil F1-score (macro):**
 
-| Model        | F1-score (Makro) |
+| Model        | F1-score (Macro) |
 | ------------ | ---------------- |
 | DecisionTree | 0.5382           |
 | XGBoost      | 0.5226           |
@@ -385,7 +385,7 @@ Berdasarkan skor tertinggi, **Decision Tree** dipilih untuk tahap **hyperparamet
 
 ### 5.2 Hyperparameter Tuning
 
-Hyperparameter tuning dilakukan menggunakan **Optuna** dengan tujuan memaksimalkan **F1-score makro**. Parameter yang dituning antara lain:
+Hyperparameter tuning dilakukan menggunakan **Optuna** dengan tujuan memaksimalkan **F1-score macro**. Parameter yang dituning antara lain:
 
 * `criterion` (fungsi impurity): `'gini'` atau `'entropy'`
 * `max_depth`: Kedalaman maksimum pohon
@@ -423,15 +423,15 @@ model_dt.fit(X_train, y_train)
 | **Macro Avg**    | 0.65      | 0.59   | 0.61     | 1022    |
 | **Weighted Avg** | 0.93      | 0.94   | 0.93     | 1022    |
 
-Tabel di atas merupakan hasil dari evaluasi model menggunakan fungsi *classification report* pada data uji. Fokus utama evaluasi diarahkan pada nilai **F1 Score Macro**, karena metrik ini memberikan gambaran menyeluruh terhadap performa model pada setiap kelas tanpa terpengaruh oleh ketidakseimbangan distribusi kelas. Dalam kasus prediksi stroke, jumlah data pasien tanpa stroke jauh lebih banyak dibandingkan pasien yang mengalami stroke, sehingga metrik seperti *accuracy* saja tidak cukup mewakili performa model secara adil.
+Tabel di atas merupakan hasil dari evaluasi model menggunakan fungsi *classification report* pada data uji. Fokus utama evaluasi diarahkan pada nilai **F1-score macro**, karena metrik ini memberikan gambaran menyeluruh terhadap performa model pada setiap kelas tanpa terpengaruh oleh ketidakseimbangan distribusi kelas. Dalam kasus prediksi stroke, jumlah data pasien tanpa stroke jauh lebih banyak dibandingkan pasien yang mengalami stroke, sehingga metrik seperti *accuracy* saja tidak cukup mewakili performa model secara adil.
 
-F1 Score Macro menghitung rata-rata *F1 Score* dari setiap kelas secara **tidak berbobot**, sehingga performa pada kelas minoritas tetap diperhitungkan secara setara. Adapun rumus F1 Score untuk satu kelas adalah:
+F1-score macro menghitung rata-rata *F1 Score* dari setiap kelas secara **tidak berbobot**, sehingga performa pada kelas minoritas tetap diperhitungkan secara setara. Adapun rumus F1 Score untuk satu kelas adalah:
 
 $$
 F1 = 2 \cdot \frac{precision \cdot recall}{precision + recall}
 $$
 
-Kemudian untuk **F1 Score Macro**, dilakukan rata-rata dari F1 setiap kelas:
+Kemudian untuk **F1-score macro**, dilakukan rata-rata dari F1 setiap kelas:
 
 $$
 F1_{macro} = \frac{1}{N} \sum_{i=1}^{N} F1_i
@@ -439,7 +439,7 @@ $$
 
 dengan $N$ adalah jumlah kelas dan $F1_i$ adalah skor F1 dari kelas ke-i. Pendekatan ini sangat relevan ketika ingin memastikan bahwa model tidak mengabaikan performa pada kelas yang minoritas, seperti kasus positif stroke. 
 
-Berdasarkan hasil diatas, ditunjukkan bahwa akurasi model yang tinggi sebesar 94%, namun F1 Score Macro hanya 0,61, yang mencerminkan performa rata-rata model pada kedua kelas secara seimbang. Akurasi yang tinggi ini dipengaruhi oleh dominasi kelas Non-Stroke yang jumlahnya jauh lebih banyak, sehingga model cenderung baik dalam mengklasifikasikan kelas mayoritas tetapi kurang efektif mendeteksi kasus Stroke dengan F1 Score rendah (0,25).
+Berdasarkan hasil diatas, ditunjukkan bahwa akurasi model yang tinggi sebesar 94%, namun F1-score macro hanya 0,61, yang mencerminkan performa rata-rata model pada kedua kelas secara seimbang. Akurasi yang tinggi ini dipengaruhi oleh dominasi kelas Non-Stroke yang jumlahnya jauh lebih banyak, sehingga model cenderung baik dalam mengklasifikasikan kelas mayoritas tetapi kurang efektif mendeteksi kasus Stroke dengan F1 Score rendah (0,25).
 
 ### 6.2 Confusion Matrix
 ![Confusion Matrix](Images/Conf.png)
